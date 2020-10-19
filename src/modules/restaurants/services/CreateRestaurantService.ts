@@ -1,8 +1,5 @@
 import { inject, injectable } from 'tsyringe';
 import { differenceInMinutes, isBefore } from 'date-fns';
-import path from 'path';
-
-import uploadConfig from '../../../config/upload';
 
 import IOperationsRepository from '../../operations/repositories/IOperationsRepository';
 import IRestaurantsRepository from '../repositories/IRestaurantsRepository';
@@ -53,7 +50,6 @@ class CreateRestaurantService {
     const restaurant = await this.restaurantRepository.create({
       name: data.name,
       address: data.address,
-      operations: data.operations,
     });
 
     operationData.forEach(async operation => {

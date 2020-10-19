@@ -1,9 +1,5 @@
-import path from 'path';
-import fs from 'fs';
 import { differenceInMinutes, isBefore } from 'date-fns';
 import { inject, injectable } from 'tsyringe';
-
-import uploadConfig from '../../../config/upload';
 
 import IOperationsRepository from '../../operations/repositories/IOperationsRepository';
 import IRestaurantsRepository from '../repositories/IRestaurantsRepository';
