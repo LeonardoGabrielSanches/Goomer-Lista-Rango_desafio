@@ -3,6 +3,7 @@ import Operation from 'modules/operations/typeorm/entities/Operation';
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -20,7 +21,7 @@ class Product {
   price: number;
 
   @ManyToOne(() => Category)
-  @Column({ name: 'category_id' })
+  @JoinColumn({ name: 'category_id' })
   category: Category;
 
   @Column()
@@ -30,7 +31,7 @@ class Product {
   promotion_price: number;
 
   @OneToOne(() => Operation)
-  @Column({ name: 'promotion_operation' })
+  @JoinColumn({ name: 'promotion_operation' })
   promotion_operation: Operation;
 
   @Column()
