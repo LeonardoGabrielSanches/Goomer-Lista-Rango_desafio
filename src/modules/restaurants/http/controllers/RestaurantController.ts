@@ -5,7 +5,7 @@ import CreateRestaurantService from '../../services/CreateRestaurantService';
 import DeleteRestaurantService from '../../services/DeleteRestaurantService';
 import UpdateRestaurantService from '../../services/UpdateRestaurantService';
 
-export default class UsersController {
+export default class RestaurantController {
   public async create(request: Request, response: Response): Promise<Response> {
     const { name, address, operations } = request.body;
     console.log(operations);
@@ -14,7 +14,6 @@ export default class UsersController {
     const restaurant = await createRestaurant.execute({
       name,
       address,
-      image: request.file.filename,
       operations,
     });
 
@@ -30,7 +29,6 @@ export default class UsersController {
       id,
       name,
       address,
-      image: request.file.filename,
       operations,
     });
 

@@ -15,16 +15,15 @@ interface IRequest {
   id: number;
   name: string;
   address: string;
-  image: string;
   operations: Operation[];
 }
 
 @injectable()
 class UpdateRestaurantService {
   constructor(
-    @inject('Nome1')
+    @inject('RestaurantsRepository')
     private restaurantsRepository: IRestaurantsRepository,
-    @inject('Nome2')
+    @inject('OperationsRepository')
     private operationsRepository: IOperationsRepository,
   ) {}
 
@@ -71,18 +70,8 @@ class UpdateRestaurantService {
       }
     });
 
-    const restaurantFilePath = path.join(uploadConfig.directory, data.image);
-
-    const restaurantImageAlreadyExists = await fs.promises.stat(
-      restaurantFilePath,
-    );
-
-    if (restaurantImageAlreadyExists)
-      await fs.promises.unlink(restaurantFilePath);
-
     restaurant.name = data.name;
     restaurant.address = data.address;
-    restaurant.image = restaurantFilePath;
 
     await this.restaurantsRepository.update(restaurant);
 

@@ -13,16 +13,15 @@ import ICreateOperationDTO from '../../operations/dtos/ICreateOperationDTO';
 interface IRequest {
   name: string;
   address: string;
-  image: string;
   operations: ICreateOperationDTO[];
 }
 
 @injectable()
 class CreateRestaurantService {
   constructor(
-    @inject('Nome')
+    @inject('RestaurantsRepository')
     private restaurantRepository: IRestaurantsRepository,
-    @inject('Nome1')
+    @inject('OperationsRepository')
     private operationsRepository: IOperationsRepository,
   ) {}
 
@@ -51,12 +50,9 @@ class CreateRestaurantService {
         );
     });
 
-    const restaurantFilePath = path.join(uploadConfig.directory, data.image);
-
     const restaurant = await this.restaurantRepository.create({
       name: data.name,
       address: data.address,
-      image: restaurantFilePath,
       operations: data.operations,
     });
 
