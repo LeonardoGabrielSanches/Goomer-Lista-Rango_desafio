@@ -1,5 +1,12 @@
-import Restaurant from 'modules/restaurants/typeorm/entities/Restaurant';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+
+import Restaurant from '../../../restaurants/typeorm/entities/Restaurant';
 
 @Entity('operations')
 class Operation {
@@ -16,7 +23,7 @@ class Operation {
   days: string;
 
   @ManyToOne(() => Restaurant)
-  @Column({ name: 'restaurant_id' })
+  @JoinColumn({ name: 'restaurant_id' })
   restaurant: Restaurant;
 }
 
