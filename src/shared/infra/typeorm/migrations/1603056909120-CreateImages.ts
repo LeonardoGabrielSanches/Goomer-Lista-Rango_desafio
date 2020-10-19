@@ -4,12 +4,12 @@ export default class CreateImages1603056909120 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.addColumn(
       'restaurants',
-      new TableColumn({ name: 'image', type: 'varchar' }),
+      new TableColumn({ name: 'image', type: 'varchar', isNullable: true }),
     );
 
     await queryRunner.addColumn(
       'products',
-      new TableColumn({ name: 'image', type: 'varchar' }),
+      new TableColumn({ name: 'image', type: 'varchar', isNullable: true }),
     );
   }
 

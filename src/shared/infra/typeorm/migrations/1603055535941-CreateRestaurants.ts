@@ -55,8 +55,8 @@ export default class CreateRestaurants1603055535941
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('restaurants');
-
     await queryRunner.dropColumn('operations', 'restaurant_id');
+
+    await queryRunner.dropTable('restaurants');
   }
 }
