@@ -15,15 +15,15 @@ export default class CreateOperations1603055374283
             generationStrategy: 'increment',
           },
           {
-            name: 'opening_hour',
+            name: 'start_hour',
             type: 'varchar',
           },
           {
-            name: 'closing_hour',
+            name: 'end_hour',
             type: 'varchar',
           },
           {
-            name: 'days',
+            name: 'period_description',
             type: 'varchar',
           },
         ],

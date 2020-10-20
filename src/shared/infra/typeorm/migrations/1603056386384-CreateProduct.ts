@@ -2,6 +2,7 @@ import {
   MigrationInterface,
   QueryRunner,
   Table,
+  TableColumn,
   TableForeignKey,
 } from 'typeorm';
 
@@ -43,10 +44,6 @@ export default class CreateProduct1603056386384 implements MigrationInterface {
             name: 'promotion_price',
             type: 'decimal',
           },
-          {
-            name: 'promotion_operation',
-            type: 'integer',
-          },
         ],
       }),
     );
@@ -63,13 +60,22 @@ export default class CreateProduct1603056386384 implements MigrationInterface {
       }),
     );
 
+    await queryRunner.addColumn(
+      'operations',
+      new TableColumn({
+        name: 'product_id',
+        type: 'integer',
+        isNullable: true,
+      }),
+    );
+
     await queryRunner.createForeignKey(
-      'products',
+      'operations',
       new TableForeignKey({
         name: 'ProductOperation',
-        columnNames: ['promotion_operation'],
+        columnNames: ['product_id'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'categories',
+        referencedTableName: 'products',
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       }),
