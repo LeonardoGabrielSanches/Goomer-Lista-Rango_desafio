@@ -5,14 +5,16 @@ import UploadRestaurantImageService from '../../services/UploadRestaurantImageSe
 
 export default class UploadRestaurantImageController {
   public async upload(request: Request, response: Response): Promise<Response> {
-    const { id } = request.body;
+    const { id } = request.params;
 
     const uploadRestaurantImage = container.resolve(
       UploadRestaurantImageService,
     );
 
+    const idNumber = parseInt(id, 10);
+
     const restaurant = await uploadRestaurantImage.execute({
-      id,
+      id: idNumber,
       image: request.file.filename,
     });
 

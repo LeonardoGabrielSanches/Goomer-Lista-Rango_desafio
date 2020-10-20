@@ -22,7 +22,7 @@ restaurantRouter.put('/', restaurantController.update);
 restaurantRouter.delete('/:id', restaurantController.delete);
 
 restaurantRouter.patch(
-  '/upload',
+  '/upload/:id',
   upload.single('image'),
   uploadRestaurantImageController.upload,
 );
