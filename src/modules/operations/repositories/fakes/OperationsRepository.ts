@@ -11,7 +11,7 @@ class OperationsRepository implements IOperationsRepository {
   public async create(data: ICreateOperationDTO): Promise<Operation> {
     const operation = new Operation();
 
-    Object.assign(operation, { id: this.uniqueId }, data);
+    Object.assign(operation, { id: this.uniqueId++ }, data);
 
     this.operations.push(operation);
 

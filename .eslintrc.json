@@ -39,7 +39,8 @@
       {
         "ts": "never"
       }
-    ]
+    ],
+    "no-plusplus": "off"
   },
   "settings": {
     "import/resolver": {

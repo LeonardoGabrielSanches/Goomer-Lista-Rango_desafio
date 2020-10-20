@@ -11,7 +11,7 @@ class RestaurantRepository implements IRestaurantsRepository {
   public async create(data: ICreateRestaurantDTO): Promise<Restaurant> {
     const restaurant = new Restaurant();
 
-    Object.assign(restaurant, { id: this.uniqueId }, data);
+    Object.assign(restaurant, { id: this.uniqueId++ }, data);
 
     this.restaurants.push(restaurant);
 
