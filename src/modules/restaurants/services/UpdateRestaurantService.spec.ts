@@ -21,9 +21,9 @@ describe('UpdateRestaurantService', () => {
     );
 
     const operation = await operationsRepository.create({
-      opening_hour: '17:30',
-      closing_hour: '17:50',
-      days: 'Segunda à Sexta',
+      start_hour: '17:30',
+      end_hour: '17:50',
+      period_description: 'Segunda à Sexta',
     });
 
     const updatedRestaurant = await updateRestaurant.execute({
@@ -84,9 +84,9 @@ describe('UpdateRestaurantService', () => {
     const restaurantsRepository = new RestaurantRepository();
 
     const operation = await operationsRepository.create({
-      opening_hour: '17:30',
-      closing_hour: '17:50',
-      days: 'Segunda à Sexta',
+      start_hour: '17:30',
+      end_hour: '17:50',
+      period_description: 'Segunda à Sexta',
     });
 
     const restaurant = await restaurantsRepository.create({
@@ -107,9 +107,9 @@ describe('UpdateRestaurantService', () => {
         operations: [
           {
             id: operation.id,
-            opening_hour: '17:30',
-            closing_hour: '17:20',
-            days: 'Segunda à Sexta',
+            start_hour: '17:30',
+            end_hour: '17:20',
+            period_description: 'Segunda à Sexta',
           },
         ],
       }),
@@ -121,9 +121,9 @@ describe('UpdateRestaurantService', () => {
     const restaurantsRepository = new RestaurantRepository();
 
     const operation = await operationsRepository.create({
-      opening_hour: '17:30',
-      closing_hour: '17:50',
-      days: 'Segunda à Sexta',
+      start_hour: '17:30',
+      end_hour: '17:50',
+      period_description: 'Segunda à Sexta',
     });
 
     const restaurant = await restaurantsRepository.create({
@@ -144,9 +144,9 @@ describe('UpdateRestaurantService', () => {
         operations: [
           {
             id: operation.id,
-            opening_hour: '17:30',
-            closing_hour: '17:35',
-            days: 'Segunda à Sexta',
+            start_hour: '17:30',
+            end_hour: '17:35',
+            period_description: 'Segunda à Sexta',
           },
         ],
       }),

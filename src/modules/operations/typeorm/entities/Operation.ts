@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
+import Product from '../../../products/typeorm/entities/Product';
 import Restaurant from '../../../restaurants/typeorm/entities/Restaurant';
 
 @Entity('operations')
@@ -14,17 +15,21 @@ class Operation {
   id: number;
 
   @Column()
-  opening_hour: string;
+  start_hour: string;
 
   @Column()
-  closing_hour: string;
+  end_hour: string;
 
   @Column()
-  days: string;
+  period_description: string;
 
   @ManyToOne(() => Restaurant)
   @JoinColumn({ name: 'restaurant_id' })
   restaurant: Restaurant;
+
+  @ManyToOne(() => Product)
+  @JoinColumn({ name: 'product_id' })
+  product: Product;
 }
 
 export default Operation;

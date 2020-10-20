@@ -1,8 +1,9 @@
-import { differenceInMinutes, isBefore } from 'date-fns';
 import { inject, injectable } from 'tsyringe';
 
 import IOperationsRepository from '../../operations/repositories/IOperationsRepository';
 import IRestaurantsRepository from '../repositories/IRestaurantsRepository';
+
+import validateDate from '../../utils/DateHelper';
 
 import Restaurant from '../typeorm/entities/Restaurant';
 
@@ -16,9 +17,9 @@ interface IRequest {
 
 interface IRequestOperation {
   id: number;
-  opening_hour: string;
-  closing_hour: string;
-  days: string;
+  start_hour: string;
+  end_hour: string;
+  period_description: string;
 }
 
 @injectable()
@@ -30,10 +31,15 @@ class UpdateRestaurantService {
     private operationsRepository: IOperationsRepository,
   ) {}
 
-  public async execute(data: IRequest): Promise<Restaurant> {
-    const operationData: IRequestOperation[] = data.operations;
+  public async execute({
+    id,
+    name,
+    address,
+    operations,
+  }: IRequest): Promise<Restaurant> {
+    const operationData: IRequestOperation[] = operations;
 
-    const restaurant = await this.restaurantsRepository.getById(data.id);
+    const restaurant = await this.restaurantsRepository.getById(id);
 
     if (!restaurant) throw new Error('Restaurante não cadastrado');
 
@@ -41,32 +47,7 @@ class UpdateRestaurantService {
       throw new Error('Deve haver um horário de funcionamento');
 
     operationData.forEach(operation => {
-      const [openingHour, openingMinutes] = operation.opening_hour.split(':');
-      const [closingHour, closingMinutes] = operation.closing_hour.split(':');
-
-      const parsedOpeningHour = new Date().setHours(
-        Number.parseInt(openingHour, 10),
-        Number.parseInt(openingMinutes, 10),
-      );
-
-      const parsedClosingHour = new Date().setHours(
-        Number.parseInt(closingHour, 10),
-        Number.parseInt(closingMinutes, 10),
-      );
-
-      const dateValid = isBefore(parsedOpeningHour, parsedClosingHour);
-
-      if (!dateValid) throw new Error('O intervalo de horário deve ser válido');
-
-      const totalHoursOpen = differenceInMinutes(
-        parsedClosingHour,
-        parsedOpeningHour,
-      );
-
-      if (totalHoursOpen < 15)
-        throw new Error(
-          'O horário de funcionamento do estabelecimento deve ser de no minimo 15 minutos',
-        );
+      validateDate(operation.start_hour, operation.end_hour);
     });
 
     operationData.forEach(async operation => {
@@ -75,16 +56,16 @@ class UpdateRestaurantService {
       );
 
       if (operationDatabase) {
-        operationDatabase.opening_hour = operation.opening_hour;
-        operationDatabase.closing_hour = operation.closing_hour;
-        operationDatabase.days = operation.days;
+        operationDatabase.start_hour = operation.start_hour;
+        operationDatabase.end_hour = operation.end_hour;
+        operationDatabase.period_description = operation.period_description;
 
         this.operationsRepository.update(operationDatabase);
       }
     });
 
-    restaurant.name = data.name;
-    restaurant.address = data.address;
+    restaurant.name = name;
+    restaurant.address = address;
 
     await this.restaurantsRepository.update(restaurant);
 

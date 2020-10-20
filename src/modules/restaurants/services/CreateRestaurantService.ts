@@ -1,8 +1,9 @@
 import { inject, injectable } from 'tsyringe';
-import { differenceInMinutes, isBefore } from 'date-fns';
 
 import IOperationsRepository from '../../operations/repositories/IOperationsRepository';
 import IRestaurantsRepository from '../repositories/IRestaurantsRepository';
+
+import validateDate from '../../utils/DateHelper';
 
 import Restaurant from '../typeorm/entities/Restaurant';
 
@@ -14,9 +15,9 @@ interface IRequest {
 }
 
 interface IRequestOperation {
-  opening_hour: string;
-  closing_hour: string;
-  days: string;
+  start_hour: string;
+  end_hour: string;
+  period_description: string;
 }
 
 @injectable()
@@ -28,51 +29,30 @@ class CreateRestaurantService {
     private operationsRepository: IOperationsRepository,
   ) {}
 
-  public async execute(data: IRequest): Promise<Restaurant> {
-    const operationData: IRequestOperation[] = data.operations;
+  public async execute({
+    name,
+    address,
+    operations,
+  }: IRequest): Promise<Restaurant> {
+    const operationData: IRequestOperation[] = operations;
 
     if (operationData.length <= 0)
       throw new Error('Deve haver um horário de funcionamento');
 
     operationData.forEach(operation => {
-      const [openingHour, openingMinutes] = operation.opening_hour.split(':');
-      const [closingHour, closingMinutes] = operation.closing_hour.split(':');
-
-      const parsedOpeningHour = new Date().setHours(
-        Number.parseInt(openingHour, 10),
-        Number.parseInt(openingMinutes, 10),
-      );
-
-      const parsedClosingHour = new Date().setHours(
-        Number.parseInt(closingHour, 10),
-        Number.parseInt(closingMinutes, 10),
-      );
-
-      const dateValid = isBefore(parsedOpeningHour, parsedClosingHour);
-
-      if (!dateValid) throw new Error('O intervalo de horário deve ser válido');
-
-      const totalMinutesOpen = differenceInMinutes(
-        parsedClosingHour,
-        parsedOpeningHour,
-      );
-
-      if (totalMinutesOpen < 15)
-        throw new Error(
-          'O horário de funcionamento do estabelecimento deve ser de no minimo 15 minutos',
-        );
+      validateDate(operation.start_hour, operation.end_hour);
     });
 
     const restaurant = await this.restaurantRepository.create({
-      name: data.name,
-      address: data.address,
+      name,
+      address,
     });
 
     operationData.forEach(async operation => {
       await this.operationsRepository.create({
-        opening_hour: operation.opening_hour,
-        closing_hour: operation.closing_hour,
-        days: operation.days,
+        start_hour: operation.start_hour,
+        end_hour: operation.end_hour,
+        period_description: operation.period_description,
         restaurant,
       });
     });

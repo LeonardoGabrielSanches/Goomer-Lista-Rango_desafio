@@ -18,14 +18,14 @@ describe('CreateRestaurantService', () => {
       address: '8th Ave 541',
       operations: [
         {
-          opening_hour: '17:30',
-          closing_hour: '18:50',
-          days: 'Segunda à Sexta',
+          start_hour: '17:30',
+          end_hour: '18:50',
+          period_description: 'Segunda à Sexta',
         },
         {
-          opening_hour: '17:30',
-          closing_hour: '17:45',
-          days: 'Domingos e feriados',
+          start_hour: '17:30',
+          end_hour: '17:45',
+          period_description: 'Domingos e feriados',
         },
       ],
     });
@@ -66,9 +66,9 @@ describe('CreateRestaurantService', () => {
         address: '8th Ave 541',
         operations: [
           {
-            opening_hour: '17:30',
-            closing_hour: '17:20',
-            days: 'Segunda à Sexta',
+            start_hour: '17:30',
+            end_hour: '17:20',
+            period_description: 'Segunda à Sexta',
           },
         ],
       }),
@@ -90,9 +90,9 @@ describe('CreateRestaurantService', () => {
         address: '8th Ave 541',
         operations: [
           {
-            opening_hour: '17:30',
-            closing_hour: '17:35',
-            days: 'Segunda à Sexta',
+            start_hour: '17:30',
+            end_hour: '17:35',
+            period_description: 'Segunda à Sexta',
           },
         ],
       }),
