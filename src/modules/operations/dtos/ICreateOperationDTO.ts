@@ -1,8 +1,8 @@
 import Restaurant from '../../restaurants/typeorm/entities/Restaurant';
 
 interface ICreateOperationDTO {
-  opening_hour: Date;
-  closing_hour: Date;
+  opening_hour: string;
+  closing_hour: string;
   days: string;
   restaurant?: Restaurant;
 }

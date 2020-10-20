@@ -4,7 +4,7 @@ import IRestaurantsRepository from '../repositories/IRestaurantsRepository';
 @injectable()
 class DeleteRestaurantService {
   constructor(
-    @inject('Nome1')
+    @inject('RestaurantsRepository')
     private restaurantsRepository: IRestaurantsRepository,
   ) {}
 

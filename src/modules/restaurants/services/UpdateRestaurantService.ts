@@ -4,14 +4,21 @@ import { inject, injectable } from 'tsyringe';
 import IOperationsRepository from '../../operations/repositories/IOperationsRepository';
 import IRestaurantsRepository from '../repositories/IRestaurantsRepository';
 
-import Operation from '../../operations/typeorm/entities/Operation';
 import Restaurant from '../typeorm/entities/Restaurant';
 
 interface IRequest {
   id: number;
   name: string;
   address: string;
-  operations: Operation[];
+  // eslint-disable-next-line no-use-before-define
+  operations: IRequestOperation[];
+}
+
+interface IRequestOperation {
+  id: number;
+  opening_hour: string;
+  closing_hour: string;
+  days: string;
 }
 
 @injectable()
@@ -24,7 +31,7 @@ class UpdateRestaurantService {
   ) {}
 
   public async execute(data: IRequest): Promise<Restaurant> {
-    const operationData: Operation[] = data.operations;
+    const operationData: IRequestOperation[] = data.operations;
 
     const restaurant = await this.restaurantsRepository.getById(data.id);
 
@@ -34,16 +41,26 @@ class UpdateRestaurantService {
       throw new Error('Deve haver um horário de funcionamento');
 
     operationData.forEach(operation => {
-      const dateValid = isBefore(
-        operation.opening_hour,
-        operation.closing_hour,
+      const [openingHour, openingMinutes] = operation.opening_hour.split(':');
+      const [closingHour, closingMinutes] = operation.closing_hour.split(':');
+
+      const parsedOpeningHour = new Date().setHours(
+        Number.parseInt(openingHour, 10),
+        Number.parseInt(openingMinutes, 10),
       );
+
+      const parsedClosingHour = new Date().setHours(
+        Number.parseInt(closingHour, 10),
+        Number.parseInt(closingMinutes, 10),
+      );
+
+      const dateValid = isBefore(parsedOpeningHour, parsedClosingHour);
 
       if (!dateValid) throw new Error('O intervalo de horário deve ser válido');
 
       const totalHoursOpen = differenceInMinutes(
-        operation.closing_hour,
-        operation.opening_hour,
+        parsedClosingHour,
+        parsedOpeningHour,
       );
 
       if (totalHoursOpen < 15)

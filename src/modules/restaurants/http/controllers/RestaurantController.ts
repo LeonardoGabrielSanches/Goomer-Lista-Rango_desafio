@@ -5,10 +5,24 @@ import CreateRestaurantService from '../../services/CreateRestaurantService';
 import DeleteRestaurantService from '../../services/DeleteRestaurantService';
 import UpdateRestaurantService from '../../services/UpdateRestaurantService';
 
+import RestaurantsRepository from '../../typeorm/repositories/RestaurantsRepository';
+
 export default class RestaurantController {
+  public async index(request: Request, response: Response): Promise<Response> {
+    const { id } = request.params;
+
+    const idNumber = parseInt(id, 10);
+
+    const restaurantsRepository = container.resolve(RestaurantsRepository);
+
+    const restaurant = await restaurantsRepository.getById(idNumber);
+
+    return response.json(restaurant);
+  }
+
   public async create(request: Request, response: Response): Promise<Response> {
     const { name, address, operations } = request.body;
-    console.log(operations);
+
     const createRestaurant = container.resolve(CreateRestaurantService);
 
     const restaurant = await createRestaurant.execute({
@@ -40,11 +54,18 @@ export default class RestaurantController {
 
     const deleteRestaurant = container.resolve(DeleteRestaurantService);
 
-    // eslint-disable-next-line radix
-    const idNumber = parseInt(id);
+    const idNumber = parseInt(id, 10);
 
-    const restaurant = await deleteRestaurant.execute(idNumber);
+    await deleteRestaurant.execute(idNumber);
 
-    return response.json(restaurant);
+    return response.status(204).send();
+  }
+
+  public async show(request: Request, response: Response): Promise<Response> {
+    const restaurantsRepository = container.resolve(RestaurantsRepository);
+
+    const restaurants = await restaurantsRepository.getAll();
+
+    return response.json(restaurants);
   }
 }

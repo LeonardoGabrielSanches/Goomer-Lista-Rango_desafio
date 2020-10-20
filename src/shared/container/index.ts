@@ -1,14 +1,14 @@
 import { container } from 'tsyringe';
 
-import OperationsRepository from '../../modules/operations/repositories/fakes/OperationsRepository';
+import OperationsRepository from '../../modules/operations/typeorm/repositories/OperationsRepository';
 import IOperationsRepository from '../../modules/operations/repositories/IOperationsRepository';
 
-import RestaurantRepository from '../../modules/restaurants/repositories/fakes/RestaurantsRepository';
+import RestaurantsRepository from '../../modules/restaurants/typeorm/repositories/RestaurantsRepository';
 import IRestaurantsRepository from '../../modules/restaurants/repositories/IRestaurantsRepository';
 
 container.registerSingleton<IRestaurantsRepository>(
   'RestaurantsRepository',
-  RestaurantRepository,
+  RestaurantsRepository,
 );
 
 container.registerSingleton<IOperationsRepository>(

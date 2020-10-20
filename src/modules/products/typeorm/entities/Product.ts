@@ -1,5 +1,3 @@
-import Category from 'modules/categories/typeorm/entities/Category';
-import Operation from 'modules/operations/typeorm/entities/Operation';
 import {
   Column,
   Entity,
@@ -8,6 +6,9 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+
+import Operation from '../../../operations/typeorm/entities/Operation';
+import Category from '../../../categories/typeorm/entities/Category';
 
 @Entity('products')
 class Product {
@@ -21,7 +22,7 @@ class Product {
   price: number;
 
   @ManyToOne(() => Category)
-  @JoinColumn({ name: 'category_id' })
+  @JoinColumn()
   category: Category;
 
   @Column()

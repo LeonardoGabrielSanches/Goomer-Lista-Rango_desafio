@@ -14,10 +14,10 @@ class Operation {
   id: number;
 
   @Column()
-  opening_hour: Date;
+  opening_hour: string;
 
   @Column()
-  closing_hour: Date;
+  closing_hour: string;
 
   @Column()
   days: string;

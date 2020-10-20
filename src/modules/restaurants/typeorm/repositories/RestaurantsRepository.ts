@@ -12,10 +12,13 @@ class RestaurantsRepository implements IRestaurantsRepository {
     this.ormRepository = getRepository(Restaurant);
   }
 
-  public async create(data: ICreateRestaurantDTO): Promise<Restaurant> {
+  public async create({
+    name,
+    address,
+  }: ICreateRestaurantDTO): Promise<Restaurant> {
     const restaurant = this.ormRepository.create({
-      name: data.name,
-      address: data.address,
+      name,
+      address,
     });
 
     await this.ormRepository.save(restaurant);
@@ -24,11 +27,14 @@ class RestaurantsRepository implements IRestaurantsRepository {
   }
 
   public async getAll(): Promise<Restaurant[]> {
-    return this.ormRepository.find();
+    return this.ormRepository.find({ relations: ['operations'] });
   }
 
   public async getById(id: number): Promise<Restaurant | undefined> {
-    return this.ormRepository.findOne({ id });
+    return this.ormRepository.findOne({
+      where: { id },
+      relations: ['operations'],
+    });
   }
 
   public async update(restaurant: Restaurant): Promise<Restaurant> {

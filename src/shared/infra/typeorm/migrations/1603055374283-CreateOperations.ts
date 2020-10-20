@@ -16,11 +16,11 @@ export default class CreateOperations1603055374283
           },
           {
             name: 'opening_hour',
-            type: 'time',
+            type: 'varchar',
           },
           {
             name: 'closing_hour',
-            type: 'time',
+            type: 'varchar',
           },
           {
             name: 'days',

@@ -1,5 +1,3 @@
-import { addMinutes } from 'date-fns';
-
 import OperationsRepository from '../../operations/repositories/fakes/OperationsRepository';
 import RestaurantRepository from '../repositories/fakes/RestaurantsRepository';
 
@@ -15,22 +13,19 @@ describe('CreateRestaurantService', () => {
       operationsRepository,
     );
 
-    const date = new Date();
-
     const restaurant = await createRestaurant.execute({
       name: 'Number One Restaurant',
       address: '8th Ave 541',
-      image: 'image',
       operations: [
         {
-          opening_hour: date,
-          closing_hour: addMinutes(date, 20),
-          days: '0|1|2',
+          opening_hour: '17:30',
+          closing_hour: '18:50',
+          days: 'Segunda à Sexta',
         },
         {
-          opening_hour: date,
-          closing_hour: addMinutes(date, 60),
-          days: '3|4|5|6',
+          opening_hour: '17:30',
+          closing_hour: '17:45',
+          days: 'Domingos e feriados',
         },
       ],
     });
@@ -51,7 +46,6 @@ describe('CreateRestaurantService', () => {
       createRestaurant.execute({
         name: 'Number One Restaurant',
         address: '8th Ave 541',
-        image: 'image',
         operations: [],
       }),
     ).rejects.toBeInstanceOf(Error);
@@ -66,18 +60,15 @@ describe('CreateRestaurantService', () => {
       operationsRepository,
     );
 
-    const date = new Date();
-
     expect(
       createRestaurant.execute({
         name: 'Number One Restaurant',
         address: '8th Ave 541',
-        image: 'image',
         operations: [
           {
-            opening_hour: addMinutes(date, -60),
-            closing_hour: date,
-            days: '3|4|5|6',
+            opening_hour: '17:30',
+            closing_hour: '17:20',
+            days: 'Segunda à Sexta',
           },
         ],
       }),
@@ -93,18 +84,15 @@ describe('CreateRestaurantService', () => {
       operationsRepository,
     );
 
-    const date = new Date();
-
     expect(
       createRestaurant.execute({
         name: 'Number One Restaurant',
         address: '8th Ave 541',
-        image: 'image',
         operations: [
           {
-            opening_hour: date,
-            closing_hour: date,
-            days: '3|4|5|6',
+            opening_hour: '17:30',
+            closing_hour: '17:35',
+            days: 'Segunda à Sexta',
           },
         ],
       }),

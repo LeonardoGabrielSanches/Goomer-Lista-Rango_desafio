@@ -5,12 +5,18 @@ import IOperationsRepository from '../../operations/repositories/IOperationsRepo
 import IRestaurantsRepository from '../repositories/IRestaurantsRepository';
 
 import Restaurant from '../typeorm/entities/Restaurant';
-import ICreateOperationDTO from '../../operations/dtos/ICreateOperationDTO';
 
 interface IRequest {
   name: string;
   address: string;
-  operations: ICreateOperationDTO[];
+  // eslint-disable-next-line no-use-before-define
+  operations: IRequestOperation[];
+}
+
+interface IRequestOperation {
+  opening_hour: string;
+  closing_hour: string;
+  days: string;
 }
 
 @injectable()
@@ -23,25 +29,35 @@ class CreateRestaurantService {
   ) {}
 
   public async execute(data: IRequest): Promise<Restaurant> {
-    const operationData: ICreateOperationDTO[] = data.operations;
+    const operationData: IRequestOperation[] = data.operations;
 
     if (operationData.length <= 0)
       throw new Error('Deve haver um horário de funcionamento');
 
     operationData.forEach(operation => {
-      const dateValid = isBefore(
-        operation.opening_hour,
-        operation.closing_hour,
+      const [openingHour, openingMinutes] = operation.opening_hour.split(':');
+      const [closingHour, closingMinutes] = operation.closing_hour.split(':');
+
+      const parsedOpeningHour = new Date().setHours(
+        Number.parseInt(openingHour, 10),
+        Number.parseInt(openingMinutes, 10),
       );
+
+      const parsedClosingHour = new Date().setHours(
+        Number.parseInt(closingHour, 10),
+        Number.parseInt(closingMinutes, 10),
+      );
+
+      const dateValid = isBefore(parsedOpeningHour, parsedClosingHour);
 
       if (!dateValid) throw new Error('O intervalo de horário deve ser válido');
 
-      const totalHoursOpen = differenceInMinutes(
-        operation.closing_hour,
-        operation.opening_hour,
+      const totalMinutesOpen = differenceInMinutes(
+        parsedClosingHour,
+        parsedOpeningHour,
       );
 
-      if (totalHoursOpen < 15)
+      if (totalMinutesOpen < 15)
         throw new Error(
           'O horário de funcionamento do estabelecimento deve ser de no minimo 15 minutos',
         );
