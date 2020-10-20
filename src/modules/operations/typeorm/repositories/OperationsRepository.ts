@@ -13,16 +13,18 @@ class OperationsRepository implements IOperationsRepository {
   }
 
   public async create({
-    opening_hour,
-    closing_hour,
-    days,
+    start_hour,
+    end_hour,
+    period_description,
     restaurant,
+    product,
   }: ICreateOperationDTO): Promise<Operation> {
     const operation = this.ormRepository.create({
-      opening_hour,
-      closing_hour,
-      days,
+      start_hour,
+      end_hour,
+      period_description,
       restaurant,
+      product,
     });
 
     await this.ormRepository.save(operation);

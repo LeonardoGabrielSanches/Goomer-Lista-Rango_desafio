@@ -3,7 +3,6 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -22,11 +21,14 @@ class Product {
   price: number;
 
   @ManyToOne(() => Category)
-  @JoinColumn({ name: 'category_id' })
+  @JoinColumn()
   category: Category;
 
   @Column()
   promotion: boolean;
+
+  @Column()
+  promotion_description: string;
 
   @Column()
   promotion_price: number;

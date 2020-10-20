@@ -31,16 +31,19 @@ export default class RestaurantController {
       operations,
     });
 
-    return response.json(restaurant);
+    return response.status(201).json(restaurant);
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
-    const { id, name, address, operations } = request.body;
+    const { id } = request.params;
+    const { name, address, operations } = request.body;
 
     const updateRestaurant = container.resolve(UpdateRestaurantService);
 
+    const idNumber = parseInt(id, 10);
+
     const restaurant = await updateRestaurant.execute({
-      id,
+      id: idNumber,
       name,
       address,
       operations,

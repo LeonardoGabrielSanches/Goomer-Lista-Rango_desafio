@@ -1,8 +1,11 @@
 import { inject, injectable } from 'tsyringe';
+
 import IOperationsRepository from '../../operations/repositories/IOperationsRepository';
 import IRestaurantsRepository from '../../restaurants/repositories/IRestaurantsRepository';
-import validateDate from '../../utils/DateHelper';
 import IProductsRepository from '../repositories/IProductsRepository';
+import ICategoriesRepository from '../../categories/repositories/ICategoriesRepository';
+
+import validateDate from '../../utils/DateHelper';
 
 import Product from '../typeorm/entities/Product';
 
@@ -11,11 +14,11 @@ interface IRequest {
   price: number;
   category: string;
   promotion: boolean;
-  promotion_description: string;
-  promotion_price: string;
+  promotion_description?: string;
+  promotion_price?: number;
   restaurant_id: number;
   // eslint-disable-next-line no-use-before-define
-  operations: IRequestOperation[];
+  operations?: IRequestOperation[];
 }
 
 interface IRequestOperation {
@@ -33,7 +36,8 @@ class CreateProductService {
     private restaurantsRepository: IRestaurantsRepository,
     @inject('OperationsRepository')
     private operationsRepository: IOperationsRepository,
-    private categoryRepository: ICategoryRepository,
+    @inject('CategoriesRepository')
+    private categoriesRepository: ICategoriesRepository,
   ) {}
 
   public async execute({
@@ -50,21 +54,25 @@ class CreateProductService {
 
     if (!restaurant) throw new Error('Restaurante não cadastrado');
 
-    const operationData: IRequestOperation[] = operations;
+    if (promotion) {
+      const operationData: IRequestOperation[] = operations ?? [];
 
-    if (operationData.length <= 0)
-      throw new Error('Deve haver um horário de funcionamento');
+      if (operationData.length <= 0)
+        throw new Error(
+          'Deve haver um horário para o funcionamento da promoção',
+        );
 
-    operationData.forEach(operation => {
-      validateDate(operation.start_hour, operation.end_hour);
-    });
+      operationData.forEach(operation => {
+        validateDate(operation.start_hour, operation.end_hour);
+      });
+    }
 
     let categoryDatabase;
 
-    categoryDatabase = await this.categoryRepository.findByName(category);
+    categoryDatabase = await this.categoriesRepository.findByName(category);
 
     if (!categoryDatabase)
-      categoryDatabase = await this.categoryRepository.create({ name });
+      categoryDatabase = await this.categoriesRepository.create({ name });
 
     const product = await this.productsRepository.create({
       name,
@@ -76,14 +84,17 @@ class CreateProductService {
       category: categoryDatabase,
     });
 
-    operationData.forEach(async operation => {
-      await this.operationsRepository.create({
-        start_hour: operation.start_hour,
-        end_hour: operation.end_hour,
-        period_description: operation.period_description,
-        product,
+    if (operations)
+      operations.forEach(async operation => {
+        await this.operationsRepository.create({
+          start_hour: operation.start_hour,
+          end_hour: operation.end_hour,
+          period_description: operation.period_description,
+          product,
+        });
       });
-    });
+
+    return product;
   }
 }
 

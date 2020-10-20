@@ -6,6 +6,7 @@ import IRestaurantsRepository from '../repositories/IRestaurantsRepository';
 import validateDate from '../../utils/DateHelper';
 
 import Restaurant from '../typeorm/entities/Restaurant';
+import Operation from '../../operations/typeorm/entities/Operation';
 
 interface IRequest {
   id: number;
@@ -50,6 +51,8 @@ class UpdateRestaurantService {
       validateDate(operation.start_hour, operation.end_hour);
     });
 
+    const updatedOperations: Operation[] = [];
+
     operationData.forEach(async operation => {
       const operationDatabase = await this.operationsRepository.findById(
         operation.id,
@@ -60,7 +63,9 @@ class UpdateRestaurantService {
         operationDatabase.end_hour = operation.end_hour;
         operationDatabase.period_description = operation.period_description;
 
-        this.operationsRepository.update(operationDatabase);
+        updatedOperations.push(operationDatabase);
+
+        await this.operationsRepository.update(operationDatabase);
       }
     });
 
@@ -68,6 +73,16 @@ class UpdateRestaurantService {
     restaurant.address = address;
 
     await this.restaurantsRepository.update(restaurant);
+
+    Object.assign(
+      restaurant,
+      {
+        image: restaurant.image
+          ? `http://localhost:3333/uploads/${restaurant.image}`
+          : null,
+      },
+      { operations: updatedOperations },
+    );
 
     return restaurant;
   }

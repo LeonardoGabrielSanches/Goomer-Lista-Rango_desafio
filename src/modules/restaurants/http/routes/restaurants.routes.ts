@@ -17,7 +17,7 @@ restaurantRouter.get('/:id', restaurantController.index);
 
 restaurantRouter.post('/', restaurantController.create);
 
-restaurantRouter.put('/', restaurantController.update);
+restaurantRouter.put('/:id', restaurantController.update);
 
 restaurantRouter.delete('/:id', restaurantController.delete);
 

@@ -43,6 +43,12 @@ class UploadRestaurantImageService {
 
     await this.restaurantsRepository.update(restaurant);
 
+    Object.assign(restaurant, {
+      image: restaurant.image
+        ? `http://localhost:3333/uploads/${restaurant.image}`
+        : null,
+    });
+
     return restaurant;
   }
 }

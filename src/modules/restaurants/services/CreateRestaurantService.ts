@@ -48,14 +48,18 @@ class CreateRestaurantService {
       address,
     });
 
-    operationData.forEach(async operation => {
-      await this.operationsRepository.create({
+    operationData.map(async operation => {
+      const createdOperation = await this.operationsRepository.create({
         start_hour: operation.start_hour,
         end_hour: operation.end_hour,
         period_description: operation.period_description,
         restaurant,
       });
+
+      Object.assign(operation, { id: createdOperation.id });
     });
+
+    Object.assign(restaurant, { operations: operationData });
 
     return restaurant;
   }

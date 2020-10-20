@@ -6,8 +6,8 @@ interface ICreateProductDTO {
   price: number;
   category: Category;
   promotion: boolean;
-  promotion_description: string;
-  promotion_price: string;
+  promotion_description?: string;
+  promotion_price?: number;
   restaurant: Restaurant;
 }
 
