@@ -39,10 +39,12 @@ export default class CreateProduct1603056386384 implements MigrationInterface {
           {
             name: 'promotion_description',
             type: 'varchar',
+            isNullable: true,
           },
           {
             name: 'promotion_price',
             type: 'decimal',
+            isNullable: true,
           },
         ],
       }),
@@ -83,6 +85,10 @@ export default class CreateProduct1603056386384 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.dropForeignKey('operations', 'ProductOperation');
+
+    await queryRunner.dropColumn('operations', 'product_id');
+
     await queryRunner.dropTable('products');
   }
 }

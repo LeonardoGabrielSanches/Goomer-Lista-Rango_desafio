@@ -10,7 +10,11 @@ export default class AddProductToRestaurant1603158953843
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.addColumn(
       'products',
-      new TableColumn({ name: 'restaurant_id', type: 'integer' }),
+      new TableColumn({
+        name: 'restaurant_id',
+        type: 'integer',
+        isNullable: true,
+      }),
     );
 
     await queryRunner.createForeignKey(
@@ -27,6 +31,8 @@ export default class AddProductToRestaurant1603158953843
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.dropForeignKey('products', 'ProductRestaurant');
+
     await queryRunner.dropColumn('products', 'restaurant_id');
   }
 }
