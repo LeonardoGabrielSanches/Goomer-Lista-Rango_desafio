@@ -33,16 +33,16 @@ export default class CreateProduct1603056386384 implements MigrationInterface {
             isNullable: true,
           },
           {
-            name: 'promotion',
+            name: 'sale',
             type: 'boolean',
           },
           {
-            name: 'promotion_description',
+            name: 'sale_description',
             type: 'varchar',
             isNullable: true,
           },
           {
-            name: 'promotion_price',
+            name: 'sale_price',
             type: 'decimal',
             isNullable: true,
           },

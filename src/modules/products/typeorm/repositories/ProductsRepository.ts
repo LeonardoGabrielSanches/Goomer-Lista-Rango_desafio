@@ -16,25 +16,46 @@ class ProductsRepository implements IProductsRepository {
   public async create({
     name,
     price,
-    promotion,
-    promotion_description,
-    promotion_price,
+    sale,
+    sale_description,
+    sale_price,
     category,
     restaurant,
   }: ICreateProductDTO): Promise<Product> {
     const product = this.ormRepository.create({
       name,
-      category,
       price,
-      promotion,
-      promotion_description,
-      promotion_price,
+      sale,
+      sale_description,
+      sale_price,
       restaurant,
+      category,
     });
 
     await this.ormRepository.save(product);
 
     return product;
+  }
+
+  public async getById(id: number): Promise<Product | undefined> {
+    return this.ormRepository.findOne({
+      where: { id },
+      relations: ['operations', 'category'],
+    });
+  }
+
+  public async getAll(): Promise<Product[]> {
+    return this.ormRepository.find({
+      relations: ['operations', 'category'],
+    });
+  }
+
+  public async update(product: Product): Promise<Product> {
+    return this.ormRepository.save(product);
+  }
+
+  public async delete(id: number): Promise<void> {
+    await this.ormRepository.delete(id);
   }
 }
 

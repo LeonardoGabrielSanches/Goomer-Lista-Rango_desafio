@@ -17,6 +17,8 @@ export default class RestaurantController {
 
     const restaurant = await restaurantsRepository.getById(idNumber);
 
+    if (!restaurant) return response.status(204).send();
+
     return response.json(restaurant);
   }
 
@@ -68,6 +70,8 @@ export default class RestaurantController {
     const restaurantsRepository = container.resolve(RestaurantsRepository);
 
     const restaurants = await restaurantsRepository.getAll();
+
+    if (restaurants.length <= 0) return response.status(204).send();
 
     return response.json(restaurants);
   }

@@ -34,6 +34,6 @@ describe('UploadRestaurantImageService', () => {
         id: 1,
         image: 'image.png',
       }),
-    ).resolves.toBeInstanceOf(Error);
+    ).rejects.toBeInstanceOf(Error);
   });
 });

@@ -17,6 +17,28 @@ class ProductsRepository implements IProductsRepository {
 
     return product;
   }
+
+  public async getById(id: number): Promise<Product | undefined> {
+    return this.products.find(product => product.id === id);
+  }
+
+  public async getAll(): Promise<Product[]> {
+    return this.products;
+  }
+
+  public async update(product: Product): Promise<Product> {
+    const findIndex = this.products.findIndex(
+      restaurantFind => restaurantFind.id === product.id,
+    );
+
+    this.products[findIndex] = product;
+
+    return product;
+  }
+
+  public async delete(id: number): Promise<void> {
+    this.products = this.products.filter(product => product.id !== id);
+  }
 }
 
 export default ProductsRepository;

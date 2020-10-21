@@ -28,8 +28,46 @@ describe('CreateProductService', () => {
       name: 'Bread',
       category: 'Dry Food',
       price: 5.5,
-      promotion: false,
+      sale: false,
       restaurant_id: restaurant.id,
+    });
+
+    expect(product).toHaveProperty('id');
+  });
+
+  it('should be able to create a new product with discount', async () => {
+    const operationsRepository = new OperationsRepository();
+    const productsRepository = new ProductsRepository();
+    const restaurantsRepositroy = new RestaurantsRepository();
+    const categoriesRepository = new CategoriesRepository();
+
+    const createProduct = new CreateProductService(
+      productsRepository,
+      restaurantsRepositroy,
+      operationsRepository,
+      categoriesRepository,
+    );
+
+    const restaurant = await restaurantsRepositroy.create({
+      name: 'Number One Restaurant',
+      address: '8th Ave 541',
+    });
+
+    const product = await createProduct.execute({
+      name: 'Bread',
+      category: 'Dry Food',
+      price: 5.5,
+      sale: false,
+      restaurant_id: restaurant.id,
+      sale_price: 2.5,
+      sale_description: 'HAPPY HOUR',
+      operations: [
+        {
+          start_hour: '17:30',
+          end_hour: '18:30',
+          period_description: 'Segunda a sexta',
+        },
+      ],
     });
 
     expect(product).toHaveProperty('id');
@@ -58,7 +96,7 @@ describe('CreateProductService', () => {
         name: 'Bread',
         category: 'Dry Food',
         price: 5.5,
-        promotion: true,
+        sale: true,
         restaurant_id: restaurant.id,
       }),
     ).rejects.toBeInstanceOf(Error);
@@ -87,7 +125,7 @@ describe('CreateProductService', () => {
         name: 'Bread',
         category: 'Dry Food',
         price: 5.5,
-        promotion: true,
+        sale: true,
         operations: [
           {
             start_hour: '17:30',
@@ -95,8 +133,8 @@ describe('CreateProductService', () => {
             period_description: 'Segunda à Sexta',
           },
         ],
-        promotion_price: 3.5,
-        promotion_description: 'Lightining',
+        sale_price: 3.5,
+        sale_description: 'Lightining',
         restaurant_id: restaurant.id,
       }),
     ).rejects.toBeInstanceOf(Error);
@@ -120,7 +158,7 @@ describe('CreateProductService', () => {
         name: 'Bread',
         category: 'Dry Food',
         price: 5.5,
-        promotion: false,
+        sale: false,
         restaurant_id: 5,
       }),
     ).rejects.toBeInstanceOf(Error);

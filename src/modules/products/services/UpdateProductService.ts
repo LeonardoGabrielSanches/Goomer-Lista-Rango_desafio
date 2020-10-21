@@ -1,15 +1,16 @@
 import { inject, injectable } from 'tsyringe';
 
 import IOperationsRepository from '../../operations/repositories/IOperationsRepository';
-import IRestaurantsRepository from '../../restaurants/repositories/IRestaurantsRepository';
 import IProductsRepository from '../repositories/IProductsRepository';
-import ICategoriesRepository from '../../categories/repositories/ICategoriesRepository';
 
 import validateDate from '../../utils/DateHelper';
 
 import Product from '../typeorm/entities/Product';
+import IRestaurantsRepository from '../../restaurants/repositories/IRestaurantsRepository';
+import ICategoriesRepository from '../../categories/repositories/ICategoriesRepository';
 
 interface IRequest {
+  id: number;
   name: string;
   price: number;
   category: string;
@@ -22,13 +23,14 @@ interface IRequest {
 }
 
 interface IRequestOperation {
+  id?: number;
   start_hour: string;
   end_hour: string;
   period_description: string;
 }
 
 @injectable()
-class CreateProductService {
+class UpdateProductService {
   constructor(
     @inject('ProductsRepository')
     private productsRepository: IProductsRepository,
@@ -41,15 +43,20 @@ class CreateProductService {
   ) {}
 
   public async execute({
-    restaurant_id,
-    operations,
+    id,
     name,
     price,
+    category,
     sale,
     sale_description,
     sale_price,
-    category,
+    restaurant_id,
+    operations,
   }: IRequest): Promise<Product> {
+    const product = await this.productsRepository.getById(id);
+
+    if (!product) throw new Error('Produto não cadastrado');
+
     const restaurant = await this.restaurantsRepository.getById(restaurant_id);
 
     if (!restaurant) throw new Error('Restaurante não cadastrado');
@@ -58,46 +65,63 @@ class CreateProductService {
       const operationData: IRequestOperation[] = operations ?? [];
 
       if (operationData.length <= 0)
-        throw new Error(
-          'Deve haver um horário para o funcionamento da promoção',
-        );
+        throw new Error('Deve haver um horário de funcionamento');
 
       operationData.forEach(operation => {
         validateDate(operation.start_hour, operation.end_hour);
       });
+
+      operationData.forEach(async operation => {
+        if (operation.id) {
+          const operationDatabase = await this.operationsRepository.findById(
+            operation.id,
+          );
+
+          if (operationDatabase) {
+            operationDatabase.start_hour = operation.start_hour;
+            operationDatabase.end_hour = operation.end_hour;
+            operationDatabase.period_description = operation.period_description;
+
+            await this.operationsRepository.update(operationDatabase);
+          }
+        } else {
+          await this.operationsRepository.create({
+            start_hour: operation.start_hour,
+            end_hour: operation.end_hour,
+            period_description: operation.period_description,
+            product,
+          });
+        }
+      });
     }
 
-    let categoryDatabase;
-
-    categoryDatabase = await this.categoriesRepository.findByName(category);
+    let categoryDatabase = await this.categoriesRepository.findByName(category);
 
     if (!categoryDatabase)
       categoryDatabase = await this.categoriesRepository.create({
         name: category,
       });
 
-    const product = await this.productsRepository.create({
+    Object.assign(product, {
       name,
       price,
       sale,
       sale_description,
       sale_price,
-      restaurant,
+      operations,
       category: categoryDatabase,
     });
 
-    if (operations)
-      operations.forEach(async operation => {
-        await this.operationsRepository.create({
-          start_hour: operation.start_hour,
-          end_hour: operation.end_hour,
-          period_description: operation.period_description,
-          product,
-        });
-      });
+    const productResponse = await this.productsRepository.update(product);
 
-    return product;
+    Object.assign(productResponse, {
+      image: productResponse.image
+        ? `http://localhost:3333/uploads/${productResponse.image}`
+        : null,
+    });
+
+    return productResponse;
   }
 }
 
-export default CreateProductService;
+export default UpdateProductService;

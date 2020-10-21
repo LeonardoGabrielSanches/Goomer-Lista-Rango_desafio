@@ -3,10 +3,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
 import Category from '../../../categories/typeorm/entities/Category';
+import Operation from '../../../operations/typeorm/entities/Operation';
 import Restaurant from '../../../restaurants/typeorm/entities/Restaurant';
 
 @Entity('products')
@@ -21,17 +23,17 @@ class Product {
   price: number;
 
   @ManyToOne(() => Category)
-  @JoinColumn()
+  @JoinColumn({ name: 'category_id' })
   category: Category;
 
   @Column()
-  promotion: boolean;
+  sale: boolean;
 
   @Column()
-  promotion_description: string;
+  sale_description: string;
 
   @Column()
-  promotion_price: number;
+  sale_price: number;
 
   @Column()
   image: string;
@@ -39,6 +41,10 @@ class Product {
   @ManyToOne(() => Restaurant)
   @JoinColumn({ name: 'restaurant_id' })
   restaurant: Restaurant;
+
+  @OneToMany(() => Operation, operation => operation.product)
+  @JoinColumn()
+  operations: Operation[];
 }
 
 export default Product;
