@@ -11,13 +11,13 @@ const uploadProductImageController = new UploadProductImageController();
 
 const upload = multer(uploadConfig);
 
-productsRouter.get('/', productController.show);
+productsRouter.get('/', productController.showByRestaurant);
 
-productsRouter.get('/:id', productController.index);
+productsRouter.get('/:id', productController.show);
 
 productsRouter.post('/', productController.create);
 
-productsRouter.put('/:id', productController.update);
+productsRouter.put('/', productController.update);
 
 productsRouter.delete('/:id', productController.delete);
 

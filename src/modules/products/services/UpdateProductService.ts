@@ -10,7 +10,7 @@ import IRestaurantsRepository from '../../restaurants/repositories/IRestaurantsR
 import ICategoriesRepository from '../../categories/repositories/ICategoriesRepository';
 
 interface IRequest {
-  id: number;
+  id: string;
   name: string;
   price: number;
   category: string;

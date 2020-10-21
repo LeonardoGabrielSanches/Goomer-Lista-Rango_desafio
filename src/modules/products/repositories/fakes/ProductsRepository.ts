@@ -18,17 +18,19 @@ class ProductsRepository implements IProductsRepository {
     return product;
   }
 
-  public async getById(id: number): Promise<Product | undefined> {
-    return this.products.find(product => product.id === id);
+  public async getById(id: string): Promise<Product | undefined> {
+    return this.products.find(product => product.id.toString() === id);
   }
 
-  public async getAll(): Promise<Product[]> {
-    return this.products;
+  public async getAllByRestaurantId(restaurantId: string): Promise<Product[]> {
+    return this.products.filter(
+      product => product.restaurant.id.toString() === restaurantId,
+    );
   }
 
   public async update(product: Product): Promise<Product> {
     const findIndex = this.products.findIndex(
-      restaurantFind => restaurantFind.id === product.id,
+      productFind => productFind.id === product.id,
     );
 
     this.products[findIndex] = product;
@@ -36,8 +38,10 @@ class ProductsRepository implements IProductsRepository {
     return product;
   }
 
-  public async delete(id: number): Promise<void> {
-    this.products = this.products.filter(product => product.id !== id);
+  public async delete(id: string): Promise<void> {
+    this.products = this.products.filter(
+      product => product.id.toString() !== id,
+    );
   }
 }
 

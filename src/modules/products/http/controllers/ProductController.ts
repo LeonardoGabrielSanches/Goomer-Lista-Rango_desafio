@@ -8,14 +8,12 @@ import UpdateProductService from '../../services/UpdateProductService';
 import DeleteProductService from '../../services/DeleteProductService';
 
 export default class ProductController {
-  public async index(request: Request, response: Response): Promise<Response> {
+  public async show(request: Request, response: Response): Promise<Response> {
     const { id } = request.params;
-
-    const idNumber = parseInt(id, 10);
 
     const productsRepository = container.resolve(ProductsRepository);
 
-    const product = await productsRepository.getById(idNumber);
+    const product = await productsRepository.getById(id);
 
     if (!product) return response.status(204).send();
 
@@ -51,8 +49,8 @@ export default class ProductController {
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
-    const { id } = request.params;
     const {
+      id,
       name,
       price,
       category,
@@ -65,10 +63,8 @@ export default class ProductController {
 
     const updateProduct = container.resolve(UpdateProductService);
 
-    const idNumber = parseInt(id, 10);
-
     const product = await updateProduct.execute({
-      id: idNumber,
+      id,
       name,
       price,
       category,
@@ -87,17 +83,22 @@ export default class ProductController {
 
     const deleteProduct = container.resolve(DeleteProductService);
 
-    const idNumber = parseInt(id, 10);
-
-    await deleteProduct.execute(idNumber);
+    await deleteProduct.execute(id);
 
     return response.status(204).send();
   }
 
-  public async show(request: Request, response: Response): Promise<Response> {
+  public async showByRestaurant(
+    request: Request,
+    response: Response,
+  ): Promise<Response> {
+    const { restaurantId } = request.query;
+
     const productsRepository = container.resolve(ProductsRepository);
 
-    const products = await productsRepository.getAll();
+    const products = await productsRepository.getAllByRestaurantId(
+      restaurantId,
+    );
 
     if (products.length <= 0) return response.status(204).send();
 

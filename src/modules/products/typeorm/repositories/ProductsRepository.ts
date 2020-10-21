@@ -37,14 +37,14 @@ class ProductsRepository implements IProductsRepository {
     return product;
   }
 
-  public async getById(id: number): Promise<Product | undefined> {
+  public async getById(id: string): Promise<Product | undefined> {
     return this.ormRepository.findOne({
       where: { id },
       relations: ['operations', 'category'],
     });
   }
 
-  public async getAll(): Promise<Product[]> {
+  public async getAllByRestaurantId(): Promise<Product[]> {
     return this.ormRepository.find({
       relations: ['operations', 'category'],
     });
@@ -54,7 +54,7 @@ class ProductsRepository implements IProductsRepository {
     return this.ormRepository.save(product);
   }
 
-  public async delete(id: number): Promise<void> {
+  public async delete(id: string): Promise<void> {
     await this.ormRepository.delete(id);
   }
 }

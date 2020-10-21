@@ -134,7 +134,7 @@ describe('CreateProductService', () => {
           },
         ],
         sale_price: 3.5,
-        sale_description: 'Lightining',
+        sale_description: 'HAPPY HOUR',
         restaurant_id: restaurant.id,
       }),
     ).rejects.toBeInstanceOf(Error);

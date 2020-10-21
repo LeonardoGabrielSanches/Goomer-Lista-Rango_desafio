@@ -11,10 +11,8 @@ export default class UploadRestaurantImageController {
       UploadProductImageService,
     );
 
-    const idNumber = parseInt(id, 10);
-
     const product = await uploadProductImageService.execute({
-      id: idNumber,
+      id,
       image: request.file.filename,
     });
 

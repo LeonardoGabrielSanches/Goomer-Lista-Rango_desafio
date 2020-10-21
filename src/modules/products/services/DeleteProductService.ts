@@ -9,7 +9,7 @@ class DeleteProductService {
     private productsRepository: IProductsRepository,
   ) {}
 
-  public async execute(id: number): Promise<void> {
+  public async execute(id: string): Promise<void> {
     await this.productsRepository.delete(id);
   }
 }

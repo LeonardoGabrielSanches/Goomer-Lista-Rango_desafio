@@ -4,10 +4,10 @@ import Product from '../typeorm/entities/Product';
 
 interface IProductsRepository {
   create(data: ICreateProductDTO): Promise<Product>;
-  getById(id: number): Promise<Product | undefined>;
-  getAll(): Promise<Product[]>;
+  getById(id: string): Promise<Product | undefined>;
+  getAllByRestaurantId(restaurantId: string): Promise<Product[]>;
   update(product: Product): Promise<Product>;
-  delete(id: number): Promise<void>;
+  delete(id: string): Promise<void>;
 }
 
 export default IProductsRepository;
