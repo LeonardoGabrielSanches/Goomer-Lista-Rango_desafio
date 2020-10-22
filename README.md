@@ -1,16 +1,4 @@
-# Indice
-
-- [Sobre](#-sobre)
-- [Tecnologias Utilizadas](#-tecnologias-utilizadas)
-- [Como baixar o projeto](#-como-baixar-o-projeto)
-
 ## Lista Rango
-
-## 🔖&nbsp; Sobre
-
-
-
----
 
 ## 🚀 Tecnologias utilizadas
 
@@ -40,7 +28,7 @@ O projeto foi desenvolvido utilizando as seguintes tecnologias
 
 ## Ambiente do projeto
 
-# Para realizar a configuração do ambiente é necessário que sejam feitas algumas mudanças no arquivo ormconfig.json que está na raiz do projeto.
+Para realizar a configuração do ambiente é necessário que sejam feitas algumas mudanças no arquivo ormconfig.json que está na raiz do projeto.
 ```bash
 
 {
@@ -66,8 +54,8 @@ O projeto foi desenvolvido utilizando as seguintes tecnologias
 Após isso será necessário rodar um comando para que as "migrations" sejam executadas no banco de dados. E então rode o comando para dar um start no servidor.
 
 ```bash
-	yarn typeorm migration:run
-	yarn dev:server
+	$ yarn typeorm migration:run
+	$ yarn dev:server
 ```
 
 ## Rotas
@@ -158,8 +146,17 @@ Após isso será necessário rodar um comando para que as "migrations" sejam exe
        	"period_description": "Segunda a sexta"
      	}
    	]
-}
+	}
 ```
+
+## Dificuldades
+- A maior dificuldade no desenvolvimento do projeto foi a estruturação dos horários no banco de dados, o que resultou em lógicas não tão boas para o desenvolvimento.
+- Outra dificuldade durante o desenvolvimento, foi a falta de conhecimento na hora de realizar os testes unitários para o upload de arquivos.
+
+## Pontos a serem melhorados
+- Organização dos commits (Commits com menos código, porém mais direcionados)
+- Aprendizado mais aprofundado em testes unitários e estruturas de código.
+- Estruturação do banco de dados , que resultaria em lógicas mais simples. 
 
 ---
 
