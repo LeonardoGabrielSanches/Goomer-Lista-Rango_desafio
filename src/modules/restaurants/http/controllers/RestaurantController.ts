@@ -32,7 +32,7 @@ export default class RestaurantController {
       operations,
     });
 
-    return response.status(201).json(restaurant);
+    return response.status(201).json(classToClass(restaurant));
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
@@ -67,6 +67,6 @@ export default class RestaurantController {
 
     if (restaurants.length <= 0) return response.status(204).send();
 
-    return response.json(restaurants);
+    return response.json(classToClass(restaurants));
   }
 }

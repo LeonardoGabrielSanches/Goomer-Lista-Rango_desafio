@@ -28,8 +28,8 @@ class Restaurant {
   operations: Operation[];
 
   @Expose({ name: 'imageUrl' })
-  getImage(): string {
-    return `http://localhost:3333/uploads/${this.image}`;
+  getImage(): string | null {
+    return this.image ? `http://localhost:3333/uploads/${this.image}` : null;
   }
 }
 

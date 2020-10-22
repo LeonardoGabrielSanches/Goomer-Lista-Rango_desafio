@@ -6,6 +6,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Expose } from 'class-transformer';
 
 import Category from '../../../categories/typeorm/entities/Category';
 import Operation from '../../../operations/typeorm/entities/Operation';
@@ -45,6 +46,11 @@ class Product {
   @OneToMany(() => Operation, operation => operation.product)
   @JoinColumn()
   operations: Operation[];
+
+  @Expose({ name: 'imageUrl' })
+  getImage(): string | null {
+    return this.image ? `http://localhost:3333/uploads/${this.image}` : null;
+  }
 }
 
 export default Product;

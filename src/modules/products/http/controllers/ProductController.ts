@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import ProductsRepository from '../../typeorm/repositories/ProductsRepository';
 
@@ -17,7 +18,7 @@ export default class ProductController {
 
     if (!product) return response.status(204).send();
 
-    return response.json(product);
+    return response.json(classToClass(product));
   }
 
   public async create(request: Request, response: Response): Promise<Response> {
@@ -45,7 +46,7 @@ export default class ProductController {
       sale_price,
     });
 
-    return response.status(201).json(product);
+    return response.status(201).json(classToClass(product));
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
@@ -75,7 +76,7 @@ export default class ProductController {
       operations,
     });
 
-    return response.json(product);
+    return response.json(classToClass(product));
   }
 
   public async delete(request: Request, response: Response): Promise<Response> {
@@ -99,9 +100,9 @@ export default class ProductController {
     const products = await productsRepository.getAllByRestaurantId(
       restaurantId,
     );
-
+    console.log(products);
     if (products.length <= 0) return response.status(204).send();
 
-    return response.json(products);
+    return response.json(classToClass(products));
   }
 }

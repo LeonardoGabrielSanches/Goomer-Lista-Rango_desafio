@@ -114,12 +114,6 @@ class UpdateProductService {
 
     const productResponse = await this.productsRepository.update(product);
 
-    Object.assign(productResponse, {
-      image: productResponse.image
-        ? `http://localhost:3333/uploads/${productResponse.image}`
-        : null,
-    });
-
     return productResponse;
   }
 }
