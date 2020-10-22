@@ -100,7 +100,7 @@ export default class ProductController {
     const products = await productsRepository.getAllByRestaurantId(
       restaurantId,
     );
-    console.log(products);
+
     if (products.length <= 0) return response.status(204).send();
 
     return response.json(classToClass(products));

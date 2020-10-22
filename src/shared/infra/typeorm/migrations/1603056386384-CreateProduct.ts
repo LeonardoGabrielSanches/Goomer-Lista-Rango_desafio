@@ -25,7 +25,7 @@ export default class CreateProduct1603056386384 implements MigrationInterface {
           },
           {
             name: 'price',
-            type: 'decimal',
+            type: 'real',
           },
           {
             name: 'category_id',
@@ -43,7 +43,7 @@ export default class CreateProduct1603056386384 implements MigrationInterface {
           },
           {
             name: 'sale_price',
-            type: 'decimal',
+            type: 'real',
             isNullable: true,
           },
         ],
