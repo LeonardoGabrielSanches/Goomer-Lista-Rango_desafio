@@ -5,6 +5,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Expose } from 'class-transformer';
 
 import Operation from '../../../operations/typeorm/entities/Operation';
 
@@ -25,6 +26,11 @@ class Restaurant {
   @OneToMany(() => Operation, operation => operation.restaurant)
   @JoinColumn()
   operations: Operation[];
+
+  @Expose({ name: 'imageUrl' })
+  getImage(): string {
+    return `http://localhost:3333/uploads/${this.image}`;
+  }
 }
 
 export default Restaurant;

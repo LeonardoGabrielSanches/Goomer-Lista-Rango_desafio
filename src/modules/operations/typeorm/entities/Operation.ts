@@ -5,6 +5,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Expose } from 'class-transformer';
 
 import Product from '../../../products/typeorm/entities/Product';
 import Restaurant from '../../../restaurants/typeorm/entities/Restaurant';
@@ -30,6 +31,11 @@ class Operation {
   @ManyToOne(() => Product)
   @JoinColumn({ name: 'product_id' })
   product: Product;
+
+  @Expose({ name: 'period_full_description' })
+  getOperation(): string {
+    return `${this.period_description} ${this.start_hour} até ${this.end_hour}`;
+  }
 }
 
 export default Operation;

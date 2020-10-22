@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import CreateRestaurantService from '../../services/CreateRestaurantService';
 import DeleteRestaurantService from '../../services/DeleteRestaurantService';
@@ -17,7 +18,7 @@ export default class RestaurantController {
 
     if (!restaurant) return response.status(204).send();
 
-    return response.json(restaurant);
+    return response.json(classToClass(restaurant));
   }
 
   public async create(request: Request, response: Response): Promise<Response> {
