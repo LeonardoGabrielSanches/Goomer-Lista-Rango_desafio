@@ -72,19 +72,11 @@ class UpdateRestaurantService {
     restaurant.name = name;
     restaurant.address = address;
 
-    await this.restaurantsRepository.update(restaurant);
-
-    Object.assign(
+    const updatedRestaurant = await this.restaurantsRepository.update(
       restaurant,
-      {
-        image: restaurant.image
-          ? `http://localhost:3333/uploads/${restaurant.image}`
-          : null,
-      },
-      { operations: updatedOperations },
     );
 
-    return restaurant;
+    return updatedRestaurant;
   }
 }
 

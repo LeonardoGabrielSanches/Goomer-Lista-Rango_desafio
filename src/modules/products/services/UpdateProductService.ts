@@ -112,9 +112,9 @@ class UpdateProductService {
       category: categoryDatabase,
     });
 
-    const productResponse = await this.productsRepository.update(product);
+    const productUpdated = await this.productsRepository.update(product);
 
-    return productResponse;
+    return productUpdated;
   }
 }
 

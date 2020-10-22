@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import UploadProductImageService from '../../services/UploadProductImageService';
 
@@ -16,6 +17,6 @@ export default class UploadRestaurantImageController {
       image: request.file.filename,
     });
 
-    return response.json(product);
+    return response.json(classToClass(product));
   }
 }

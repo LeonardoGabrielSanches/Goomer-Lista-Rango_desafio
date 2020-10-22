@@ -43,12 +43,6 @@ class UploadProductImageService {
 
     await this.productsRepository.update(product);
 
-    Object.assign(product, {
-      image: product.image
-        ? `http://localhost:3333/uploads/${product.image}`
-        : null,
-    });
-
     return product;
   }
 }
