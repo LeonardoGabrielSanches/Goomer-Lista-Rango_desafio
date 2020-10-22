@@ -9,7 +9,7 @@ import IProductsRepository from '../repositories/IProductsRepository';
 import Product from '../typeorm/entities/Product';
 
 interface IRequest {
-  id: number;
+  id: string;
   image: string;
 }
 

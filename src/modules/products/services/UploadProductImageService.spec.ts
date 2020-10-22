@@ -30,7 +30,7 @@ describe('UploadRestaurantImageService', () => {
     );
 
     const updatedRestaurant = await uploadRestaurantImage.execute({
-      id: product.id,
+      id: product.id.toString(),
       image: 'image.png',
     });
 
@@ -46,7 +46,7 @@ describe('UploadRestaurantImageService', () => {
 
     expect(
       uploadProductImage.execute({
-        id: 1,
+        id: '1',
         image: 'image.png',
       }),
     ).rejects.toBeInstanceOf(Error);

@@ -44,8 +44,9 @@ class ProductsRepository implements IProductsRepository {
     });
   }
 
-  public async getAllByRestaurantId(): Promise<Product[]> {
+  public async getAllByRestaurantId(restaurantId: string): Promise<Product[]> {
     return this.ormRepository.find({
+      where: { restaurant: restaurantId },
       relations: ['operations', 'category'],
     });
   }

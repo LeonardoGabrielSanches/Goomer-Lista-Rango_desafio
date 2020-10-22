@@ -35,7 +35,7 @@ describe('UpdateProductService', () => {
     });
 
     const updatedProduct = await updateProduct.execute({
-      id: product.id,
+      id: product.id.toString(),
       name: 'Bread',
       category: 'Dry Food',
       price: 2.3,
@@ -82,7 +82,7 @@ describe('UpdateProductService', () => {
     });
 
     const updatedProduct = await updateProduct.execute({
-      id: product.id,
+      id: product.id.toString(),
       name: 'Bread',
       category: 'Dry Food',
       price: 2.3,
@@ -133,7 +133,7 @@ describe('UpdateProductService', () => {
 
     expect(
       updateProduct.execute({
-        id: product.id,
+        id: product.id.toString(),
         name: 'Bread',
         category: 'Dry Food',
         price: 2.3,
@@ -173,7 +173,7 @@ describe('UpdateProductService', () => {
 
     expect(
       updateProduct.execute({
-        id: product.id,
+        id: product.id.toString(),
         name: 'Bread',
         category: 'Dry Food',
         price: 2.3,
@@ -220,7 +220,7 @@ describe('UpdateProductService', () => {
 
     expect(
       updateProduct.execute({
-        id: product.id,
+        id: product.id.toString(),
         name: 'Bread',
         category: 'Dry Food',
         price: 2.3,
@@ -250,7 +250,7 @@ describe('UpdateProductService', () => {
 
     expect(
       updateProduct.execute({
-        id: 3,
+        id: '3',
         name: 'Bread',
         category: 'Dry Food',
         price: 2.3,

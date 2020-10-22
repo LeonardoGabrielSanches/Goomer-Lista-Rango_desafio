@@ -11,9 +11,9 @@ const uploadRestaurantImageController = new UploadRestaurantImageController();
 
 const upload = multer(uploadConfig);
 
-restaurantRouter.get('/', restaurantController.show);
+restaurantRouter.get('/', restaurantController.index);
 
-restaurantRouter.get('/:id', restaurantController.index);
+restaurantRouter.get('/:id', restaurantController.show);
 
 restaurantRouter.post('/', restaurantController.create);
 

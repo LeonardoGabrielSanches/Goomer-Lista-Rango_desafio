@@ -27,6 +27,8 @@ describe('DeleteProductService', () => {
 
     const deleteProductService = new DeleteProductService(productsRepository);
 
-    expect(deleteProductService.execute(product.id)).resolves.not.toThrow();
+    expect(
+      deleteProductService.execute(product.id.toString()),
+    ).resolves.not.toThrow();
   });
 });

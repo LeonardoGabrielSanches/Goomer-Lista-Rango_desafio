@@ -8,14 +8,12 @@ import UpdateRestaurantService from '../../services/UpdateRestaurantService';
 import RestaurantsRepository from '../../typeorm/repositories/RestaurantsRepository';
 
 export default class RestaurantController {
-  public async index(request: Request, response: Response): Promise<Response> {
+  public async show(request: Request, response: Response): Promise<Response> {
     const { id } = request.params;
-
-    const idNumber = parseInt(id, 10);
 
     const restaurantsRepository = container.resolve(RestaurantsRepository);
 
-    const restaurant = await restaurantsRepository.getById(idNumber);
+    const restaurant = await restaurantsRepository.getById(id);
 
     if (!restaurant) return response.status(204).send();
 
@@ -37,15 +35,12 @@ export default class RestaurantController {
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
-    const { id } = request.params;
-    const { name, address, operations } = request.body;
+    const { id, name, address, operations } = request.body;
 
     const updateRestaurant = container.resolve(UpdateRestaurantService);
 
-    const idNumber = parseInt(id, 10);
-
     const restaurant = await updateRestaurant.execute({
-      id: idNumber,
+      id,
       name,
       address,
       operations,
@@ -59,14 +54,12 @@ export default class RestaurantController {
 
     const deleteRestaurant = container.resolve(DeleteRestaurantService);
 
-    const idNumber = parseInt(id, 10);
-
-    await deleteRestaurant.execute(idNumber);
+    await deleteRestaurant.execute(id);
 
     return response.status(204).send();
   }
 
-  public async show(request: Request, response: Response): Promise<Response> {
+  public async index(request: Request, response: Response): Promise<Response> {
     const restaurantsRepository = container.resolve(RestaurantsRepository);
 
     const restaurants = await restaurantsRepository.getAll();
